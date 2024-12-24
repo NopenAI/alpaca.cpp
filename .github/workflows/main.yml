@@ -1,0 +1,31 @@
+name: Windows Build
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Install MinGW
+        run: sudo apt-get install -y mingw-w64
+
+      - name: Compile Windows Executable
+        run: |
+          x86_64-w64-mingw32-g++ -o app.exe main.cpp \
+            -I/path/to/directx/include \
+            -L/path/to/directx/lib \
+            -ld3d9 -ld3dx11
+
+      - name: Upload Build Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: windows-app
+          path: app.exe
+
+          
